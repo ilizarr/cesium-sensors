@@ -980,7 +980,10 @@ define('CustomSensorVolume',[
      * @exception {DeveloperError} this.radius must be greater than or equal to zero.
      * @exception {DeveloperError} this.lateralSurfaceMaterial must be defined.
      */
-    CustomSensorVolume.prototype.update = function(context, frameState, commandList) {
+    CustomSensorVolume.prototype.update = function(frameState) {
+	var context = frameState.context;
+	var commandList = frameState.commandList;
+
         this._mode = frameState.mode;
         if (!this.show || this._mode !== SceneMode.SCENE3D) {
             return;
@@ -2110,8 +2113,8 @@ define('RectangularPyramidSensorVolume',[
         }
     });
 
-    RectangularPyramidSensorVolume.prototype.update = function(context, frameState, commandList) {
-        this._customSensor.update(context, frameState, commandList);
+    RectangularPyramidSensorVolume.prototype.update = function(frameState) {
+        this._customSensor.update(frameState);
     };
 
     RectangularPyramidSensorVolume.prototype.isDestroyed = function() {
@@ -2125,6 +2128,7 @@ define('RectangularPyramidSensorVolume',[
 
     return RectangularPyramidSensorVolume;
 });
+
 /*global define*/
 define('RectangularSensorVisualizer',[
         'Cesium/Core/AssociativeArray',

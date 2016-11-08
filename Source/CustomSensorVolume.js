@@ -347,7 +347,10 @@ define([
      * @exception {DeveloperError} this.radius must be greater than or equal to zero.
      * @exception {DeveloperError} this.lateralSurfaceMaterial must be defined.
      */
-    CustomSensorVolume.prototype.update = function(context, frameState, commandList) {
+    CustomSensorVolume.prototype.update = function(frameState) {
+	var context = frameState.context;
+	var commandList = frameState.commandList;
+
         this._mode = frameState.mode;
         if (!this.show || this._mode !== SceneMode.SCENE3D) {
             return;

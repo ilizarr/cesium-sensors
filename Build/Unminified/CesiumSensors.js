@@ -645,9 +645,12 @@ define('CustomSensorVolume',[
         'Cesium/Core/DeveloperError',
         'Cesium/Core/Matrix4',
         'Cesium/Core/PrimitiveType',
+	'Cesium/Renderer/Buffer',
         'Cesium/Renderer/BufferUsage',
         'Cesium/Renderer/ShaderSource',
+	'Cesium/Renderer/RenderState',
         'Cesium/Renderer/DrawCommand',
+	'Cesium/Renderer/VertexArray',
         'text!./CustomSensorVolumeFS.glsl',
         'text!./CustomSensorVolumeVS.glsl',
         'text!./SensorVolume.glsl',
@@ -669,9 +672,12 @@ define('CustomSensorVolume',[
         DeveloperError,
         Matrix4,
         PrimitiveType,
+	Buffer,
         BufferUsage,
         ShaderSource,
+	RenderState,
         DrawCommand,
+	VertexArray,
         CustomSensorVolumeFS,
         CustomSensorVolumeVS,
         ShadersSensorVolume,
@@ -947,7 +953,12 @@ define('CustomSensorVolume',[
             vertices[k++] = n.z;
         }
 
-        var vertexBuffer = context.createVertexBuffer(new Float32Array(vertices), BufferUsage.STATIC_DRAW);
+        var vertexBuffer = Buffer.createVertexBuffer({
+		context : context,
+		typedArray: new Float32Array(vertices), 
+		usage: BufferUsage.STATIC_DRAW
+	});
+
         var stride = 2 * 3 * Float32Array.BYTES_PER_ELEMENT;
 
         var attributes = [{
@@ -966,7 +977,7 @@ define('CustomSensorVolume',[
             strideInBytes : stride
         }];
 
-        return context.createVertexArray(attributes);
+        return new VertexArray({context: context, attributes: attributes});
     }
 
     /**
@@ -1003,7 +1014,7 @@ define('CustomSensorVolume',[
             var rs;
 
             if (translucent) {
-                rs = context.createRenderState({
+                rs = RenderState.fromCache({
                     depthTest : {
                         // This would be better served by depth testing with a depth buffer that does not
                         // include the ellipsoid depth - or a g-buffer containing an ellipsoid mask
@@ -1021,7 +1032,7 @@ define('CustomSensorVolume',[
                 this._frontFaceColorCommand.renderState = rs;
                 this._frontFaceColorCommand.pass = Pass.TRANSLUCENT;
 
-                rs = context.createRenderState({
+                rs = RenderState.fromCache({
                     depthTest : {
                         enabled : !this.showThroughEllipsoid
                     },
@@ -1036,7 +1047,7 @@ define('CustomSensorVolume',[
                 this._backFaceColorCommand.renderState = rs;
                 this._backFaceColorCommand.pass = Pass.TRANSLUCENT;
 
-                rs = context.createRenderState({
+                rs = RenderState.fromCache({
                     depthTest : {
                         enabled : !this.showThroughEllipsoid
                     },
@@ -1045,7 +1056,7 @@ define('CustomSensorVolume',[
                 });
                 this._pickCommand.renderState = rs;
             } else {
-                rs = context.createRenderState({
+                rs = RenderState.fromCache({
                     depthTest : {
                         enabled : true
                     },
@@ -1054,7 +1065,7 @@ define('CustomSensorVolume',[
                 this._frontFaceColorCommand.renderState = rs;
                 this._frontFaceColorCommand.pass = Pass.OPAQUE;
 
-                rs = context.createRenderState({
+                rs = RenderState.fromCache({
                     depthTest : {
                         enabled : true
                     },
@@ -1111,8 +1122,14 @@ define('CustomSensorVolume',[
                     sources : [ShadersSensorVolume, this._lateralSurfaceMaterial.shaderSource, CustomSensorVolumeFS]
                 });
 
-                frontFaceColorCommand.shaderProgram = context.replaceShaderProgram(
-                        frontFaceColorCommand.shaderProgram, CustomSensorVolumeVS, fsSource, attributeLocations);
+		frontFaceColorCommand.shaderProgram = ShaderProgram.replaceCache({
+                    context : context,
+                    shaderProgram : frontFaceColorCommand.shaderProgram,
+                    vertexShaderSource : CustomSensorVolumeVS,
+                    fragmentShaderSource : fsSource,
+                    attributeLocations : attributeLocations
+                });
+
                 frontFaceColorCommand.uniformMap = combine(this._uniforms, this._lateralSurfaceMaterial._uniforms);
 
                 backFaceColorCommand.shaderProgram = frontFaceColorCommand.shaderProgram;
@@ -1148,8 +1165,13 @@ define('CustomSensorVolume',[
                     pickColorQualifier : 'uniform'
                 });
 
-                pickCommand.shaderProgram = context.replaceShaderProgram(
-                    pickCommand.shaderProgram, CustomSensorVolumeVS, pickFS, attributeLocations);
+                pickCommand.shaderProgram = ShaderProgram.replaceCache({
+                    context : context,
+                    shaderProgram : pickCommand.shaderProgram,
+                    vertexShaderSource : CustomSensorVolumeVS,
+                    fragmentShaderSource : pickFS,
+                    attributeLocations : attributeLocations
+                });
 
                 var that = this;
                 var uniforms = {
@@ -2581,9 +2603,12 @@ define('Cesium/Core/BoundingSphere', function() { return Cesium["BoundingSphere"
 define('Cesium/Core/combine', function() { return Cesium["combine"]; });
 define('Cesium/Core/ComponentDatatype', function() { return Cesium["ComponentDatatype"]; });
 define('Cesium/Core/PrimitiveType', function() { return Cesium["PrimitiveType"]; });
+define('Cesium/Renderer/Buffer', function() { return Cesium["Buffer"]; });
 define('Cesium/Renderer/BufferUsage', function() { return Cesium["BufferUsage"]; });
 define('Cesium/Renderer/ShaderSource', function() { return Cesium["ShaderSource"]; });
+define('Cesium/Renderer/RenderState', function() { return Cesium["RenderState"]; });
 define('Cesium/Renderer/DrawCommand', function() { return Cesium["DrawCommand"]; });
+define('Cesium/Renderer/VertexArray', function() { return Cesium["VertexArray"]; });
 define('Cesium/Scene/BlendingState', function() { return Cesium["BlendingState"]; });
 define('Cesium/Scene/CullFace', function() { return Cesium["CullFace"]; });
 define('Cesium/Scene/Material', function() { return Cesium["Material"]; });

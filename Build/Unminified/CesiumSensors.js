@@ -650,6 +650,7 @@ define('CustomSensorVolume',[
         'Cesium/Renderer/ShaderSource',
 	'Cesium/Renderer/RenderState',
         'Cesium/Renderer/DrawCommand',
+	'Cesium/Renderer/ShaderProgram',
 	'Cesium/Renderer/VertexArray',
         'text!./CustomSensorVolumeFS.glsl',
         'text!./CustomSensorVolumeVS.glsl',
@@ -677,6 +678,7 @@ define('CustomSensorVolume',[
         ShaderSource,
 	RenderState,
         DrawCommand,
+	ShaderProgram,
 	VertexArray,
         CustomSensorVolumeFS,
         CustomSensorVolumeVS,
@@ -2608,6 +2610,7 @@ define('Cesium/Renderer/BufferUsage', function() { return Cesium["BufferUsage"];
 define('Cesium/Renderer/ShaderSource', function() { return Cesium["ShaderSource"]; });
 define('Cesium/Renderer/RenderState', function() { return Cesium["RenderState"]; });
 define('Cesium/Renderer/DrawCommand', function() { return Cesium["DrawCommand"]; });
+define('Cesium/Renderer/ShaderProgram', function() { return Cesium["ShaderProgram"]; });
 define('Cesium/Renderer/VertexArray', function() { return Cesium["VertexArray"]; });
 define('Cesium/Scene/BlendingState', function() { return Cesium["BlendingState"]; });
 define('Cesium/Scene/CullFace', function() { return Cesium["CullFace"]; });

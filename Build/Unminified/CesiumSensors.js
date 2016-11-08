@@ -2513,6 +2513,7 @@ define('initialize',[
 
     return initialize;
 });
+
 /*global define*/
 define('CesiumSensors',[
         './initialize',

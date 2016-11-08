@@ -175,9 +175,9 @@ define([
         CzmlDataSource.updaters.push(processConicSensor, processCustomPatternSensor, processRectangularSensor);
 
         var originalDefaultVisualizersCallback = DataSourceDisplay.defaultVisualizersCallback;
-        DataSourceDisplay.defaultVisualizersCallback = function(scene, dataSource) {
+        DataSourceDisplay.defaultVisualizersCallback = function(scene, entityCluster, dataSource) {
             var entities = dataSource.entities;
-            var array = originalDefaultVisualizersCallback(scene, dataSource);
+            var array = originalDefaultVisualizersCallback(scene, entityCluster, dataSource);
             return array.concat([new ConicSensorVisualizer(scene, entities),
                                  new CustomPatternSensorVisualizer(scene, entities),
                                  new RectangularSensorVisualizer(scene, entities)]);

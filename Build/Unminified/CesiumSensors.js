@@ -1332,7 +1332,7 @@ define('ConicSensorVisualizer',[
             var position;
             var orientation;
             var data = hash[entity.id];
-            var show = entity.isAvailable(time) && Property.getValueOrDefault(conicSensorGraphics._show, time, true);
+            var show = entity.isShowing && entity.isAvailable(time) && Property.getValueOrDefault(conicSensorGraphics._show, time, true);
 
             if (show) {
                 position = Property.getValueOrUndefined(entity._position, time, cachedPosition);
@@ -1698,7 +1698,7 @@ define('CustomPatternSensorVisualizer',[
             var orientation;
             var directions;
             var data = hash[entity.id];
-            var show = entity.isAvailable(time) && Property.getValueOrDefault(customPatternSensorGraphics._show, time, true);
+            var show = entity.isShowing && entity.isAvailable(time) && Property.getValueOrDefault(customPatternSensorGraphics._show, time, true);
 
             if (show) {
                 position = Property.getValueOrUndefined(entity._position, time, cachedPosition);
@@ -1815,6 +1815,7 @@ define('CustomPatternSensorVisualizer',[
 
     return CustomPatternSensorVisualizer;
 });
+
 /*global define*/
 define('RectangularSensorGraphics',[
         'Cesium/Core/defaultValue',
@@ -2233,7 +2234,7 @@ define('RectangularSensorVisualizer',[
             var position;
             var orientation;
             var data = hash[entity.id];
-            var show = entity.isAvailable(time) && Property.getValueOrDefault(rectangularSensorGraphics._show, time, true);
+            var show = entity.isShowing && entity.isAvailable(time) && Property.getValueOrDefault(rectangularSensorGraphics._show, time, true);
 
             if (show) {
                 position = Property.getValueOrUndefined(entity._position, time, cachedPosition);
